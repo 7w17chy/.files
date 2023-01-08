@@ -20,12 +20,14 @@
   services.emacs.enable = true;
   services.emacs.defaultEditor = true;
 
+  # git config
   programs.git = {
     enable = true;
     userName = "Max Nerius";
     userEmail = "nermax03@gmail.com";
   };
 
+  # fish config
   programs.fish.enable = true;
   programs.fish.plugins = [
     {
@@ -53,16 +55,7 @@ set -l nix_shell_info (
     cat = "bat";
   };
 
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
-  home.stateVersion = "22.11";
-
   # Let Home Manager install and manage itself.
+  home.stateVersion = "22.11";
   programs.home-manager.enable = true;
 }
