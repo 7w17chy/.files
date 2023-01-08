@@ -10,6 +10,7 @@
   home.packages = with pkgs; [
     bat
     lazygit
+    exa
   ];
 
   # emacs config
@@ -43,6 +44,9 @@ set -l nix_shell_info (
   '';                        
   programs.fish.shellAbbrs = {
     lg = "lazygit";
+    ls = "exa";
+    ll = "exa -l";
+    la = "exa -la";
   };
 
   # This value determines the Home Manager release that your
