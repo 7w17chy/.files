@@ -6,6 +6,9 @@
   home.username = "thulis";
   home.homeDirectory = "/home/thulis";
 
+  # swap caps lock and control
+  home.keyboard.options = [ "ctrl:swapcaps" ];
+
   # packages to install
   home.packages = with pkgs; [
     bat
