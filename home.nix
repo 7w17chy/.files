@@ -16,6 +16,9 @@
   # emacs config
   home.file.".emacs.d/init.el".source = ./init.el;
   home.file.".emacs.d/settings.org".source = ./settings.org;
+  programs.emacs.enable = true;
+  services.emacs.enable = true;
+  services.emacs.defaultEditor = true;
 
   programs.git = {
     enable = true;
