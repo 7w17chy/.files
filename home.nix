@@ -47,6 +47,7 @@ set -l nix_shell_info (
     ls = "exa";
     ll = "exa -l";
     la = "exa -la";
+    cat = "bat";
   };
 
   # This value determines the Home Manager release that your
