@@ -6,9 +6,14 @@
   home.username = "thulis";
   home.homeDirectory = "/home/thulis";
 
+  # packages to install
   home.packages = with pkgs; [
     bat
   ];
+
+  # porting over dotfiles:
+  home.file.".emacs.d/init.el".source = ./init.el;
+  home.file.".emacs.d/settings.org".source = ./settings.org;
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
