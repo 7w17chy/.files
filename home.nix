@@ -11,12 +11,14 @@
     bat
     lazygit
     exa
+    syncthing
+    fish
+    emacs
   ];
 
   # emacs config
   home.file.".emacs.d/init.el".source = ./init.el;
   home.file.".emacs.d/settings.org".source = ./settings.org;
-  programs.emacs.enable = true;
   services.emacs.enable = true;
   services.emacs.defaultEditor = true;
 
@@ -28,7 +30,6 @@
   };
 
   # fish config
-  programs.fish.enable = true;
   programs.fish.plugins = [
     {
       name = "z";
@@ -54,6 +55,9 @@ set -l nix_shell_info (
     la = "exa -la";
     cat = "bat";
   };
+
+  # syncthing config
+  services.syncthing.enable = true;
 
   # Let Home Manager install and manage itself.
   home.stateVersion = "22.11";
