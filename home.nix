@@ -18,6 +18,8 @@
     emacs
     zsh
     starship
+    hexchat
+    chromium
   ];
 
   # emacs config
@@ -35,6 +37,7 @@
     userEmail = "nermax03@gmail.com";
   };
 
+  # zsh config
   programs.zsh = {
     enable = true;
     shellAliases = {
@@ -56,6 +59,7 @@
     };
   };
 
+  # shell prompt customization
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
@@ -71,6 +75,28 @@
         format = "via [☃ $state( \($name\))](bold blue) ";
       };
     };
+  };
+
+  # hexchat config
+  programs.hexchat = {
+    enable = true;
+    settings = {
+      irc_nick1 = "nullptrexcptn";
+      irc_nick2 = "bytebender";
+      irc_username = "nullptrexcptn";
+    };
+  };
+
+  # chromium config
+  programs.chromium = {
+    enable = true;
+    extensions = [
+      { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
+      { id = "dcpihecpambacapedldabdbpakmachpb"; # bypass paywalls
+        updateUrl = "https://raw.githubusercontent.com/iamadamdev/bypass-paywalls-chrome/master/updates.xml";
+      }
+      { id = "edibdbjcniadpccecjdfdjjppcpchdlm"; } # community version of 'i don't care about cookies' 
+    ];
   };
 
   # syncthing config
