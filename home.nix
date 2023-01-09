@@ -64,6 +64,12 @@
       character = {
         success_symbol = "λ";
       };
+      nix_shell = {
+        disabled = false;
+        impure_msg = "[impure shell](bold green)";
+        pure_msg = "[pure shell](bold green)";
+        format = "via [☃ $state( \($name\))](bold blue) ";
+      };
     };
   };
 
