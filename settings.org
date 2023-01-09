@@ -357,6 +357,10 @@ error out saying the packages havn't loaded.
 #+begin_src emacs-lisp
   (plist-put org-format-latex-options :scale 1.2)
 #+end_src
+** shrink preview image size
+#+begin_src emacs-lisp
+(setq org-image-actual-width 350)
+#+end_src
 ** add custom environments to cdlatex
 #+begin_src emacs-lisp
       (setq cdlatex-env-alist
