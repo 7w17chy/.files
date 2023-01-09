@@ -15,15 +15,18 @@
     lazygit
     exa
     syncthing
-    fish
     emacs
+    zsh
+    starship
   ];
 
   # emacs config
   home.file.".emacs.d/init.el".source = ./init.el;
   home.file.".emacs.d/settings.org".source = ./settings.org;
-  services.emacs.enable = true;
-  services.emacs.defaultEditor = true;
+  services.emacs = {
+    enable = true;
+    defaultEditor = true;
+  };
 
   # git config
   programs.git = {
@@ -32,31 +35,36 @@
     userEmail = "nermax03@gmail.com";
   };
 
-  # fish config
-  programs.fish.plugins = [
-    {
-      name = "z";
-      src = pkgs.fetchFromGitHub {
-        owner = "jethrokuan";
-        repo = "z";
-        rev = "e0e1b9dfdba362f8ab1ae8c1afc7ccf62b89f7eb";
-        sha256 = "0dbnir6jbwjpjalz14snzd3cgdysgcs3raznsijd6savad3qhijc";
+  programs.zsh = {
+    enable = true;
+    shellAliases = {
+      ls = "exa";
+      ll = "exa -l";
+      la = "exa -la";
+      lg = "lazygit";
+      cat = "bat";
+    };
+    
+    history = {
+      size = 10000;
+      path = "${config.xdg.dataHome}/zsh/history";
+    };
+
+    oh-my-zsh = {
+      enable = true;
+      plugins = [ "git" "thefuck" ];
+    };
+  };
+
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    settings = {
+      scan_timeout = 10;
+      character = {
+        success_symbol = "λ";
       };
-    }
-  ];
-  programs.fish.interactiveShellInit = ''
-set -l nix_shell_info (
-  if test -n "$IN_NIX_SHELL"
-    echo -n "<nix-shell> "
-  end
-)
-  '';                        
-  programs.fish.shellAbbrs = {
-    lg = "lazygit";
-    ls = "exa";
-    ll = "exa -l";
-    la = "exa -la";
-    cat = "bat";
+    };
   };
 
   # syncthing config
