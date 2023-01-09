@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-22.11";
-    home-manager = "github:nix-community/home-manager/release-22.11";
+    home-manager.url = "github:nix-community/home-manager/release-22.11";
     # make home-manager use our version of nixpkgs
     #home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
