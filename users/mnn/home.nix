@@ -24,8 +24,8 @@
   ];
 
   # emacs config
-  home.file.".emacs.d/init.el".source = ./emacs/init.el;
-  home.file.".emacs.d/settings.org".source = ./emacs/settings.org;
+  home.file.".emacs.d/init.el".source = ./init.el;
+  home.file.".emacs.d/settings.org".source = ./settings.org;
   services.emacs = {
     enable = true;
     defaultEditor = true;

@@ -17,6 +17,22 @@
     };
     lib = nixpkgs.lib;
   in {
+    homeManagerConfigurations = {
+      mnn = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
+        modules = [
+          ./users/mnn/home.nix
+          {
+            home = {
+              username = "mnn";
+              homeDirectory = "/home/mnn";
+              stateVersion = "22.11";
+            };
+          }
+        ];
+      };
+    };
+
     nixosConfigurations = {
       workstation = lib.nixosSystem {
         inherit system;
