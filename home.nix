@@ -20,6 +20,8 @@
     starship
     hexchat
     chromium
+    gnome.gnome-tweaks
+    discord
   ];
 
   # emacs config
