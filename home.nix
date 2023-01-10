@@ -38,6 +38,7 @@
         epkgs.use-package
         epkgs.auto-compile
         epkgs.gruvbox-theme
+        epkgs.whole-line-or-region
       ];
     })
   ];
