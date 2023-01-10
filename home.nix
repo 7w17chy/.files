@@ -39,6 +39,7 @@
         epkgs.auto-compile
         epkgs.gruvbox-theme
         epkgs.whole-line-or-region
+        epkgs.org-bullets
       ];
     })
   ];
