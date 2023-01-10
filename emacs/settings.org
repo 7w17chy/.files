@@ -45,7 +45,7 @@
 #+end_src
 ** set a nice font
 #+begin_src emacs-lisp
- (set-frame-font "Iosevka Comfy Motion 12")
+ (set-frame-font "Iosevka Comfy Motion 11")
 #+end_src
 ** Always make interactive buffers appear horizontally 
    Credit: https://stackoverflow.com/questions/21542914/make-buffer-list-always-appear-in-horizontal-split ("phils")
