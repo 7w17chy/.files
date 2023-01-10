@@ -32,6 +32,13 @@
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 #+end_src
 
+* use direnv for flexible dev environments
+#+begin_src emacs-lisp
+(use-package direnv
+  :config
+  (direnv-mode))
+#+end_src
+
 * UI enhancements
 ** enhance scrolling performance for documents with images
 #+begin_src emacs-lisp
