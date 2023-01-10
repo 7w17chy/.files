@@ -24,7 +24,7 @@
   :config
   (load-theme 'gruvbox-light-medium t))
 
-(set-frame-font "Iosevka Comfy Motion 12")
+(set-frame-font "Iosevka Comfy Motion 11")
 
 (setq split-width-threshold nil)
 (setq split-height-threshold 0)
