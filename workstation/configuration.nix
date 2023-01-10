@@ -91,11 +91,12 @@
     description = "Max Nerius";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
+      zsh
       firefox
       git
-    #  thunderbird
     ];
   };
+  users.defaultUserShell = pkgs.zsh;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

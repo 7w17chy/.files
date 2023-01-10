@@ -27,6 +27,8 @@
     hexchat
     chromium
     gnome.gnome-tweaks
+    discord
+    thefuck
 
     # customized emacs
     (emacsWithPackagesFromUsePackage {
