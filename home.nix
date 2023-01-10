@@ -26,6 +26,8 @@
     starship
     hexchat
     chromium
+    lispPackages.quicklisp
+    lispPackages.asdf
     gnome.gnome-tweaks
     discord
     thefuck
