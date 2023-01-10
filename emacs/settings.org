@@ -1,6 +1,3 @@
-* Suggestions
-** TODO take a look at emacs-async's async dired
-
 * package management
 ** enable melpa
 #+begin_src emacs-lisp
@@ -119,7 +116,7 @@
 #+end_src
 
 * Switch to a more ergonomic buffer switching interface
-#+begin_src
+#+begin_src emacs-lisp
 (global-set-key [remap list-buffers] 'ibuffer)
 #+end_src
 

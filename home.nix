@@ -9,27 +9,38 @@
   # swap caps lock and control
   home.keyboard.options = [ "ctrl:swapcaps" ];
 
+  # overlays
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+    }))
+  ];
+
   # packages to install
   home.packages = with pkgs; [
     bat
     lazygit
     exa
     syncthing
-    emacs
     zsh
     starship
     hexchat
     chromium
     gnome.gnome-tweaks
-  ];
 
-  # emacs config
-  home.file.".emacs.d/init.el".source = ./emacs/init.el;
-  home.file.".emacs.d/settings.org".source = ./emacs/settings.org;
-  services.emacs = {
-    enable = true;
-    defaultEditor = true;
-  };
+    # customized emacs
+    (emacsWithPackagesFromUsePackage {
+      config = ./emacs/init.el;
+      defaultInitFile = true;
+      package = pkgs.emacs;
+      
+      extraEmacsPackages = epkgs: [
+        epkgs.use-package
+        epkgs.auto-compile
+        epkgs.gruvbox-theme
+      ];
+    })
+  ];
 
   # git config
   programs.git = {
