@@ -29,6 +29,7 @@
     gnome.gnome-tweaks
     discord
     thefuck
+    direnv
 
     # customized emacs
     (emacsWithPackagesFromUsePackage {
@@ -36,12 +37,14 @@
       defaultInitFile = true;
       package = pkgs.emacs;
       
-      extraEmacsPackages = epkgs: [
-        epkgs.use-package
-        epkgs.auto-compile
-        epkgs.gruvbox-theme
-        epkgs.whole-line-or-region
-        epkgs.org-bullets
+      extraEmacsPackages = epkgs: with epkgs; [
+        use-package
+        auto-compile
+        gruvbox-theme
+        whole-line-or-region
+        org-bullets
+        magit
+        epkgs.direnv # beware of the pkgs.direnv <-> epkgs.direnv confusion!
       ];
     })
   ];
