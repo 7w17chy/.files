@@ -43,6 +43,7 @@
         whole-line-or-region
         org-bullets
         magit
+        cdlatex
         epkgs.direnv # beware of the pkgs.direnv <-> epkgs.direnv confusion!
       ];
     })

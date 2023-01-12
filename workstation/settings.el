@@ -151,15 +151,6 @@
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-(use-package org-journal
-       :bind
-       ("C-c n j" . org-journal-new-entry)
-       :custom
-       (org-journal-date-prefix "#+title: ")
-       (org-journal-file-format "%Y-%m-%d.org")
-       (org-journal-dir (concat org-directory "journal"))
-       (org-journal-date-format "%A, %d %B %Y"))
-
 (use-package org-roam
   :ensure t
   :after org

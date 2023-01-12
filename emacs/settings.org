@@ -261,17 +261,6 @@
        :config
        (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
    #+END_SRC
-** add journaling functionality
-#+begin_src emacs-lisp
-(use-package org-journal
-       :bind
-       ("C-c n j" . org-journal-new-entry)
-       :custom
-       (org-journal-date-prefix "#+title: ")
-       (org-journal-file-format "%Y-%m-%d.org")
-       (org-journal-dir (concat org-directory "journal"))
-       (org-journal-date-format "%A, %d %B %Y"))
-#+end_src
 ** org-roam
 *** setup
 #+begin_src emacs-lisp
@@ -329,7 +318,7 @@
 #+end_src
 *** set directory for journal/daily files
 #+begin_src emacs-lisp
-(setq org-roam-dailies-directory "journal/") 
+  (setq org-roam-dailies-directory "journal/") 
 #+end_src
 
 *** put org-roam-journal files into a seperate directory
