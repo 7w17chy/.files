@@ -296,4 +296,5 @@
      ("https://www.reddit.com/r/programming.rss" programming)
      ("https://www.reddit.com/r/emacs.rss" emacs)
      ("https://www.spektrum.de/alias/rss/spektrum-de-rss-feed/996406" spektrum)
+     ("https://media.ccc.de/news.atom" ccc)
      )))
