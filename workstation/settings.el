@@ -6,6 +6,7 @@
     (require 'use-package))
 
 (use-package auto-compile
+  :ensure t
   :config (auto-compile-on-load-mode))
 (setq load-prefer-newer t)
 
@@ -19,12 +20,14 @@
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package direnv
+  :ensure t
   :config
   (direnv-mode))
 
 (setq frame-inhibit-implied-resize nil)
 
 (use-package gruvbox-theme
+  :ensure t
   :config
   (load-theme 'gruvbox-light-medium t))
 
@@ -66,7 +69,6 @@
   :init
   (dashboard-setup-startup-hook)
   :config
-  (setq dashboard-center-contents t)
   (setq dashboard-projects-backend 'projectile)
   (setq dashboard-items '((recents  . 5)
 			  (bookmarks . 5)
@@ -84,9 +86,9 @@
 
 ;(sentence-end-double-space nil)
 
-(require 'whole-line-or-region)
-(use-package whole-line-or-region
-  :init (whole-line-or-region-global-mode))
+;; (use-package whole-line-or-region
+;;   :ensure t
+;;   :init (whole-line-or-region-global-mode))
 
 ;; Treat text written in CamelCase as distinct words (camel, case)
 (subword-mode 1)
@@ -145,6 +147,7 @@
 (setq org-agenda-include-diary t)
 
 (use-package org-bullets
+  :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 

@@ -27,13 +27,12 @@
     hexchat
     chromium
     gnome.gnome-tweaks
-    discord
     thefuck
     direnv
 
     # customized emacs
     (emacsWithPackagesFromUsePackage {
-      config = ./emacs/init.el;
+      config = ./settings.el;
       defaultInitFile = true;
       package = pkgs.emacs;
       
