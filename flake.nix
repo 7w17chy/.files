@@ -4,8 +4,7 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-22.11";
     home-manager.url = "github:nix-community/home-manager/release-22.11";
-    # make home-manager use our version of nixpkgs
-    #home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, home-manager, ... }: 
@@ -19,16 +18,18 @@
   in {
     homeManagerConfigurations = {
       mnn = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${system};
+        inherit pkgs;
         modules = [
+          ./common-home.nix
           ./workstation/home.nix
-          {
-            home = {
-              username = "mnn";
-              homeDirectory = "/home/mnn";
-              stateVersion = "22.11";
-            };
-          }
+        ];
+      };
+
+      thulis = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          ./common-home.nix
+          ./thinkpad/home.nix
         ];
       };
     };
@@ -38,6 +39,7 @@
         inherit system;
         modules = [
           ./workstation/configuration.nix
+          ./workstation/hardware-configuration.nix
         ];
       };
 

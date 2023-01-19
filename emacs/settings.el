@@ -5,11 +5,6 @@
 (eval-when-compile
     (require 'use-package))
 
-(use-package auto-compile
-  :ensure t
-  :config (auto-compile-on-load-mode))
-(setq load-prefer-newer t)
-
 (add-to-list 'load-path (concat user-emacs-directory "modes"))
 
 (use-package projectile
@@ -19,19 +14,9 @@
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
-(use-package direnv
-  :ensure t
-  :config
-  (direnv-mode))
-
 (setq frame-inhibit-implied-resize nil)
 
-(use-package gruvbox-theme
-  :ensure t
-  :config
-  (load-theme 'gruvbox-light-medium t))
-
-(set-frame-font "Iosevka Comfy Motion 11")
+(set-frame-font "Iosevka Comfy Motion 12")
 
 (setq split-width-threshold nil)
 (setq split-height-threshold 0)
@@ -76,8 +61,6 @@
   (setq dashboard-startup-banner 'logo)
   (setq dashboard-startup-banner "~/Pictures/meditate.png"))
 
-(global-set-key [remap list-buffers] 'ibuffer)
-
 (winner-mode 1)
 
 (global-set-key (kbd "M-o") 'other-window)
@@ -85,10 +68,6 @@
 (windmove-default-keybindings)
 
 ;(sentence-end-double-space nil)
-
-;; (use-package whole-line-or-region
-;;   :ensure t
-;;   :init (whole-line-or-region-global-mode))
 
 ;; Treat text written in CamelCase as distinct words (camel, case)
 (subword-mode 1)
@@ -147,9 +126,17 @@
 (setq org-agenda-include-diary t)
 
 (use-package org-bullets
-  :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(use-package org-journal
+       :bind
+       ("C-c n j" . org-journal-new-entry)
+       :custom
+       (org-journal-date-prefix "#+title: ")
+       (org-journal-file-format "%Y-%m-%d.org")
+       (org-journal-dir (concat org-directory "journal"))
+       (org-journal-date-format "%A, %d %B %Y"))
 
 (use-package org-roam
   :ensure t
@@ -212,8 +199,6 @@
 
 (plist-put org-format-latex-options :scale 1.2)
 
-(setq org-image-actual-width 350)
-
 (setq cdlatex-env-alist
       '(("definition" "\\begin{tcolorbox}[title=Definition]\nAUTOLABEL\n?\n\\end{tcolorbox}\n" nil)
 	("hinweis" "\\begin{tcolorbox}[title=Hinweis,colback=yellow!5!white,colframe=yellow!75!black]\nAUTOLABEL\n?\n\\end{tcolorbox}\n" nil)
@@ -268,6 +253,68 @@
   (lsp-ui-sideline-enable nil)
   (lsp-ui-doc-enable nil))
 
+(load "odin-mode")
+(add-to-list 'auto-mode-alist '("\\.odin\\'" . odin-mode))
+
+(add-to-list 'load-path "/home/thulis/devel/jakt/editors/emacs")
+(autoload 'jakt-mode "jakt-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.jakt\\'" . jakt-mode))
+
+(use-package rustic
+  :ensure
+  :bind (:map rustic-mode-map
+	      ("M-j" . lsp-ui-imenu)
+	      ("M-?" . lsp-find-references)
+	      ("C-c C-c l" . flycheck-list-errors)
+	      ("C-c C-c a" . lsp-execute-code-action)
+	      ("C-c C-c r" . lsp-rename)
+	      ("C-c C-c q" . lsp-workspace-restart)
+	      ("C-c C-c Q" . lsp-workspace-shutdown)
+	      ("C-c C-c s" . lsp-rust-analyzer-status))
+  :config
+  ;; uncomment for less flashiness
+  (setq lsp-eldoc-hook nil)
+  (setq lsp-enable-symbol-highlighting nil)
+  (setq lsp-signature-auto-activate nil)
+
+  ;; comment to disable rustfmt on save
+  (setq rustic-format-on-save t)
+  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+
+(defun rk/rustic-mode-hook ()
+  ;; so that run C-c C-c C-r works without having to confirm, but don't try to
+  ;; save rust buffers that are not file visiting. Once
+  ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+  ;; no longer be necessary.
+  (when buffer-file-name
+    (setq-local buffer-save-without-query t))
+  (add-hook 'before-save-hook 'lsp-format-buffer nil t))
+
+(use-package lsp-mode
+  :ensure
+  :commands lsp
+  :custom
+  ;; what to use when checking on-save. "check" is default, I prefer clippy
+  (lsp-rust-analyzer-cargo-watch-command "clippy")
+  (lsp-idle-delay 0.6)
+  ;; enable / disable the hints as you prefer:
+  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+  (lsp-rust-analyzer-display-chaining-hints t)
+  (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
+  (lsp-rust-analyzer-display-closure-return-type-hints t)
+  (lsp-rust-analyzer-display-reborrow-hints nil)
+  ;; disable flashy noise
+  (lsp-lens-enable nil)
+  (lsp-headerline-breadcrumb-enable nil)
+  :config
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+(use-package clojure-mode
+  :ensure t)
+(use-package cider
+  :after clojure-mode
+  :ensure t)
+
 ;  (use-package auctex
 ;    :ensure t)
 
@@ -287,5 +334,4 @@
      ("https://www.reddit.com/r/programming.rss" programming)
      ("https://www.reddit.com/r/emacs.rss" emacs)
      ("https://www.spektrum.de/alias/rss/spektrum-de-rss-feed/996406" spektrum)
-     ("https://media.ccc.de/news.atom" ccc)
      )))
