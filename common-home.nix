@@ -1,11 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
-  home.username = "mnn";
-  home.homeDirectory = "/home/mnn";
-
   # swap caps lock and control
   home.keyboard.options = [ "ctrl:swapcaps" ];
 
