@@ -129,7 +129,7 @@
   # TODO: abstract into function
   services = {
     syncthing.enable = true;
-    offlineimap.enable = true;
+    #offlineimap.enable = true;
     emacs.enable = true;
   };
 
