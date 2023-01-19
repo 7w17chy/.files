@@ -30,8 +30,9 @@
     hexchat
     chromium
     gnome.gnome-tweaks
-    thefuck
     direnv
+    mu
+    offlineimap
 
     # customized emacs
     (emacsWithPackagesFromUsePackage {
@@ -48,6 +49,9 @@
         magit
         cdlatex
         epkgs.direnv # beware of the pkgs.direnv <-> epkgs.direnv confusion!
+        pdf-tools
+        mu
+        mu4e-alert
       ];
     })
   ];
@@ -57,6 +61,11 @@
     enable = true;
     userName = "Max Nerius";
     userEmail = "nermax03@gmail.com";
+  };
+
+  # automagically sync mail
+  programs.offlineimap = {
+    enable = true;
   };
 
   # zsh config
@@ -121,8 +130,11 @@
     ];
   };
 
-  # syncthing config
-  services.syncthing.enable = true;
+  # system services
+  services = {
+    syncthing.enable = true;
+    offlineimap.enable = true;
+  };
 
   # Let Home Manager install and manage itself.
   home.stateVersion = "22.11";

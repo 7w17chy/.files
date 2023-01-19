@@ -88,18 +88,8 @@
     :ensure t
     :init
     (doom-modeline-mode 1)
-
     :config
     (setq doom-modeline-height 23)) 
-#+end_src
-** Nicer line numbers
-#+begin_src emacs-lisp
-  ;; (use-package linum
-  ;;   :custom
-  ;;   (global-display-line-numbers 0)
-  ;;   (display-line-numbers 0)
-  ;;   (global-linum-mode 1)
-  ;;   (linum-format "%d "))
 #+end_src
 ** highlight the current line
 #+begin_src emacs-lisp
@@ -147,12 +137,6 @@
 ** sentences can also end without two spaces after the period.
 #+begin_src emacs-lisp
 ;(sentence-end-double-space nil)
-#+end_src
-** if no region is active, make C-w kill the line (that the point is currently on)
-#+begin_src emacs-lisp
-  ;; (use-package whole-line-or-region
-  ;;   :ensure t
-  ;;   :init (whole-line-or-region-global-mode))
 #+end_src
 
 * Code editing
@@ -466,4 +450,13 @@ error out saying the packages havn't loaded.
        ("https://www.spektrum.de/alias/rss/spektrum-de-rss-feed/996406" spektrum)
        ("https://media.ccc.de/news.atom" ccc)
        )))
+#+end_src
+
+* Mail with mu4e
+#+begin_src emacs-lisp
+  (use-package mu4e
+    :ensure t
+    :config
+    (setq mu4e-mu-binary (executable-find "mu"))
+    (setq mu4e-maildir "~/.maildir"))
 #+end_src
