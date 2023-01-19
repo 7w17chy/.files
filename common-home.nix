@@ -131,9 +131,11 @@
   };
 
   # system services
+  # TODO: abstract into function
   services = {
     syncthing.enable = true;
     offlineimap.enable = true;
+    emacs.enable = true;
   };
 
   # Let Home Manager install and manage itself.
