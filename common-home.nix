@@ -31,7 +31,7 @@
 
     # customized emacs
     (emacsWithPackagesFromUsePackage {
-      config = ./emacs/settings.el;
+      config = ./emacs/init.el;
       defaultInitFile = true;
       package = pkgs.emacs;
       
