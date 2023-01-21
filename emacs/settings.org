@@ -22,6 +22,13 @@
 #+begin_src emacs-lisp
   (add-to-list 'load-path (concat user-emacs-directory "modes"))
 #+end_src
+** needed for some packages
+#+begin_src emacs-lisp
+  (use-package bind-key
+    :ensure t
+    :config
+    (add-to-list 'same-window-buffer-names "*Personal Keybindings*"))
+#+end_src
 
 * project management via projectile
 #+begin_src emacs-lisp
@@ -31,6 +38,77 @@
     (projectile-mode t)
     :config
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+#+end_src
+
+
+* managing eMail 
+** compose and read mail using =mu4e=
+#+begin_src emacs-lisp
+  (defun remove-nth-element (nth list)
+    (if (zerop nth) (cdr list)
+      (let ((last (nthcdr (1- nth) list)))
+	(setcdr last (cddr last))
+	list)))
+
+  (use-package mu4e
+    :ensure nil
+    :custom
+    (mu4e-mu-binary (executable-find "mu"))
+    (mu4e-maildir "~/Mail")
+    (mu4e-contexts
+     `(
+       ,(make-mu4e-context
+	 :name "Gmail"
+	 :match-func (lambda (msg)
+		       (when msg
+			 (mu4e-message-contact-field-matches
+			  msg '(:from :to :cc :bcc) "nermax03@gmail.com")))
+
+	 :vars '(
+		 (mu4e-trash-folder . "/Gmail/[Gmail].Trash")
+		 (mu4e-refile-folder . "/Gmail/[Gmail].Archive")
+		 (mu4e-drafts-folder . "/Gmail/[Gmail].Drafts")
+		 (mu4e-sent-folder . "/Gmail/[Gmail].Sent Mail")
+		 (user-mail-address  . "nermax03@gmail.com")
+		 (user-full-name . "Max Nerius")
+		 (smtpmail-smtp-user . "nermax03")
+		 (smtpmail-local-domain . "gmail.com")
+		 (smtpmail-default-smtp-server . "smtp.gmail.com")
+		 (smtpmail-smtp-server . "smtp.gmail.com")
+		 (smtpmail-smtp-service . 587)))))
+    (send-mail-function (quote smtpmail-send-it))
+    (mu4e-marks (remove-nth-element 5 mu4e-marks))
+    (mu4e-view-show-addresses t)
+    (message-kill-buffer-on-exit t)
+    (mu4e-context-policy 'pick-first)
+    (mu4e-confirm-quit nil)
+    :bind (("C-c m" . 'mu4e))
+    :config
+    ;; Taken from: http://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and-/
+    (add-to-list 'mu4e-marks
+		 '(trash
+		   :char ("d" . "▼")
+		   :prompt "dtrash"
+		   :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
+		   :action (lambda (docid msg target)
+			     (mu4e~proc-move docid
+					     (mu4e~mark-check-target target) "-N")))))
+#+end_src
+** get notifications about new mail using =mu4e-alert=
+#+begin_src emacs-lisp
+  (use-package mu4e-alert
+    :ensure t
+    :config
+    (setq mu4e-alert-interesting-mail-query
+	  (concat
+	   "flag:unread AND maildir:/GmailAccount/INBOX "
+	   "OR "
+	   "flag:unread AND maildir:/OutlookAccount/INBOX "
+	   ))
+    (mu4e-alert-set-default-style 'libnotify)
+    (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
+    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)
+    (mu4e-alert-enable-mode-line-display))
 #+end_src
 
 * use direnv for flexible dev environments
@@ -300,9 +378,13 @@
   ;;   '((org-roam-link org-roam-link-current)
   ;;     :foreground "#e24888" :underline t))
 #+end_src
-*** set directory for journal/daily files
+*** org-journal
 #+begin_src emacs-lisp
-  (setq org-roam-dailies-directory "journal/") 
+  (use-package org-journal
+    :ensure t
+    :after org
+    :custom
+    (org-roam-dailies-directory "journal/"))
 #+end_src
 
 *** put org-roam-journal files into a seperate directory
@@ -452,11 +534,3 @@ error out saying the packages havn't loaded.
        )))
 #+end_src
 
-* Mail with mu4e
-#+begin_src emacs-lisp
-  (use-package mu4e
-    :ensure t
-    :config
-    (setq mu4e-mu-binary (executable-find "mu"))
-    (setq mu4e-maildir "~/.maildir"))
-#+end_src
