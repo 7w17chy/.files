@@ -16,6 +16,21 @@
     };
     lib = nixpkgs.lib;
   in {
+    iosevka-comfy = pkgs.stdenvNoCC.mkDerivation {
+      name = "iosevka-comfy";
+      dontConfigue = true;
+      src = pkgs.fetchzip {
+        url = "https://github.com/protesilaos/iosevka-comfy/archive/refs/tags/1.1.0.zip";
+        stripRoot = false;
+        sha256 = "sha256-JOTQQDC0i5oOzILegslg7voXDWybeM6Vh/AEVDZeXQ4=";
+      };
+      installPhase = ''
+        mkdir -p $out/share/fonts
+        cp -R $src/iosevka-comfy-1.1.0/ $out/share/fonts/truetype/
+      '';
+      meta = { description = "The Iosevka Comfy Font Family derivation."; };
+    };
+
     homeManagerConfigurations = {
       mnn = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;

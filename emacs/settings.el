@@ -24,33 +24,55 @@
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
+(defun remove-nth-element (nth list)
+  (if (zerop nth) (cdr list)
+    (let ((last (nthcdr (1- nth) list)))
+      (setcdr last (cddr last))
+      list)))
+
 (use-package mu4e
   :ensure nil
-  :config
-  (setq mu4e-mu-binary (executable-find "mu"))
-  (setq mu4e-maildir "~/Mail")
-  (setq mu4e-contexts
-	`(
-	  ,(make-mu4e-context
-	    :name "Gmail"
-	    :match-func (lambda (msg)
-			  (when msg
-			    (mu4e-message-contact-field-matches
-			     msg '(:from :to :cc :bcc) "nermax03@gmail.com")))
+  :custom
+  (mu4e-mu-binary (executable-find "mu"))
+  (mu4e-maildir "~/Mail")
+  (mu4e-contexts
+   `(
+     ,(make-mu4e-context
+       :name "Gmail"
+       :match-func (lambda (msg)
+		     (when msg
+		       (mu4e-message-contact-field-matches
+			msg '(:from :to :cc :bcc) "nermax03@gmail.com")))
 
-	    :vars '(
-		    (mu4e-trash-folder . "/Gmail/[Gmail].Trash")
-		    (mu4e-refile-folder . "/Gmail/[Gmail].Archive")
-		    (mu4e-drafts-folder . "/Gmail/[Gmail].Drafts")
-		    (mu4e-sent-folder . "/Gmail/[Gmail].Sent Mail")
-		    (user-mail-address  . "nermax03@gmail.com")
-		    (user-full-name . "Max Nerius")
-		    (smtpmail-smtp-user . "nermax03")
-		    (smtpmail-local-domain . "gmail.com")
-		    (smtpmail-default-smtp-server . "smtp.gmail.com")
-		    (smtpmail-smtp-server . "smtp.gmail.com")
-		    (smtpmail-smtp-service . 587)))))
-  (setq send-mail-function (quote smtpmail-send-it)))
+       :vars '(
+	       (mu4e-trash-folder . "/Gmail/[Gmail].Trash")
+	       (mu4e-refile-folder . "/Gmail/[Gmail].Archive")
+	       (mu4e-drafts-folder . "/Gmail/[Gmail].Drafts")
+	       (mu4e-sent-folder . "/Gmail/[Gmail].Sent Mail")
+	       (user-mail-address  . "nermax03@gmail.com")
+	       (user-full-name . "Max Nerius")
+	       (smtpmail-smtp-user . "nermax03")
+	       (smtpmail-local-domain . "gmail.com")
+	       (smtpmail-default-smtp-server . "smtp.gmail.com")
+	       (smtpmail-smtp-server . "smtp.gmail.com")
+	       (smtpmail-smtp-service . 587)))))
+  (send-mail-function (quote smtpmail-send-it))
+  (mu4e-marks (remove-nth-element 5 mu4e-marks))
+  (mu4e-view-show-addresses t)
+  (message-kill-buffer-on-exit t)
+  (mu4e-context-policy 'pick-first)
+  (mu4e-confirm-quit nil)
+  :bind (("C-c m" . 'mu4e))
+  :config
+  ;; Taken from: http://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and-/
+  (add-to-list 'mu4e-marks
+	       '(trash
+		 :char ("d" . "▼")
+		 :prompt "dtrash"
+		 :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
+		 :action (lambda (docid msg target)
+			   (mu4e~proc-move docid
+					   (mu4e~mark-check-target target) "-N")))))
 
 (use-package mu4e-alert
   :ensure t
@@ -78,7 +100,7 @@
   :config
   (load-theme 'gruvbox-light-medium t))
 
-(set-frame-font "Iosevka Comfy Motion 11")
+;;(set-frame-font "Iosevka Comfy Motion 11")
 
 (setq split-width-threshold nil)
 (setq split-height-threshold 0)
