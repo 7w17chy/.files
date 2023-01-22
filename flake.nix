@@ -47,6 +47,7 @@
         inherit system;
         modules = [
           ./thinkpad/configuration.nix
+          ./thinkpad/hardware-configuration.nix
         ];
       };
     };
