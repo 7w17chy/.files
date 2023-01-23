@@ -26,6 +26,7 @@
     chromium
     gnome.gnome-tweaks
     direnv
+    fzf
     mu
     offlineimap
 
@@ -81,7 +82,7 @@
 
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "thefuck" ];
+      plugins = [ "git" "fzf-zsh-plugin" ];
     };
   };
 
