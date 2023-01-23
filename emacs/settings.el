@@ -33,6 +33,8 @@
 (use-package mu4e
   :ensure nil
   :custom
+  (smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg"))
+  (mu4e-user-mail-address-list '("nermax03@gmail.com"))
   (mu4e-mu-binary (executable-find "mu"))
   (mu4e-maildir "~/Mail")
   (mu4e-contexts
@@ -95,12 +97,15 @@
 
 (setq frame-inhibit-implied-resize nil)
 
+(use-package all-the-icons
+  :ensure t)
+
 (use-package gruvbox-theme
   :ensure t
   :config
   (load-theme 'gruvbox-light-medium t))
 
-;;(set-frame-font "Iosevka Comfy Motion 11")
+(set-frame-font "Iosevka Comfy Motion 11")
 
 (setq split-width-threshold nil)
 (setq split-height-threshold 0)
