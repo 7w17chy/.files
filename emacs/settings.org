@@ -30,6 +30,40 @@
     (add-to-list 'same-window-buffer-names "*Personal Keybindings*"))
 #+end_src
 
+* i use evil btw
+** base evil
+#+begin_src emacs-lisp
+    (use-package evil
+      :ensure t
+      :config (evil-mode t))
+#+end_src
+** multiple cursors
+#+begin_src emacs-lisp
+  (use-package evil-mc
+    :ensure t)
+#+end_src
+** evil in org mode
+#+begin_src emacs-lisp
+  (use-package evil-org
+    :after evil
+    :ensure t)
+#+end_src
+** latex goodies
+#+begin_src emacs-lisp
+  (use-package evil-tex
+    :after evil
+    :ensure t
+    :config
+    (add-hook 'LaTeX-mode-hook #'evil-tex-mode))
+#+end_src
+** try to use it everywhere -- hope i can contribute to that collection somewhen :^)
+#+begin_src emacs-lisp
+  (use-package evil-collection
+    :ensure t
+    :custom
+    (evil-collection-init))
+#+end_src
+
 * project management via projectile
 #+begin_src emacs-lisp
   (use-package projectile
@@ -39,7 +73,6 @@
     :config
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 #+end_src
-
 
 * managing eMail 
 ** compose and read mail using =mu4e=

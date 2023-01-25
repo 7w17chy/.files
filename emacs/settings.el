@@ -17,6 +17,23 @@
   :config
   (add-to-list 'same-window-buffer-names "*Personal Keybindings*"))
 
+(use-package evil
+  :ensure t
+  :config (evil-mode t))
+
+(use-package evil-mc
+  :ensure t)
+
+(use-package evil-org
+  :after evil
+  :ensure t)
+
+(use-package evil-tex
+  :after evil
+  :ensure t
+  :config
+  (add-hook 'LaTeX-mode-hook #'evil-tex-mode))
+
 (use-package projectile
   :ensure t
   :init
