@@ -131,9 +131,11 @@
   # system services
   # TODO: abstract into function
   services = {
-    syncthing.enable = true;
-    #offlineimap.enable = true;
     emacs.enable = true;
+    dropbox = {
+      enable = true;
+      path = "${config.home.homeDirectory}/org";
+    };
   };
 
   # Let Home Manager install and manage itself.

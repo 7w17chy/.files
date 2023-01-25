@@ -34,6 +34,11 @@
   :config
   (add-hook 'LaTeX-mode-hook #'evil-tex-mode))
 
+(use-package evil-collection
+  :ensure t
+  :custom
+  (evil-collection-init))
+
 (use-package projectile
   :ensure t
   :init
@@ -189,7 +194,7 @@
 (setq org-log-done 'time)
 
 (custom-set-variables
- '(org-directory "~/.orgfiles/")
+ '(org-directory "~/org/")
  '(org-agenda-files (list (concat org-directory "agenda_files/"))))
 
 (setq org-default-notes-file (concat org-directory "notes.org"))
