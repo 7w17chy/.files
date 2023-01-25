@@ -28,6 +28,8 @@
     direnv
     fzf
     mu
+    discord
+    dropbox
     offlineimap
 
     # customized emacs
