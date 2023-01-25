@@ -295,7 +295,7 @@
 ** Put all org files in one directory
    #+begin_src emacs-lisp
      (custom-set-variables
-      '(org-directory "~/org/")
+      '(org-directory "~/Dropbox/org/")
       '(org-agenda-files (list (concat org-directory "agenda_files/"))))
    #+end_src
 ** Org-capture

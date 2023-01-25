@@ -194,7 +194,7 @@
 (setq org-log-done 'time)
 
 (custom-set-variables
- '(org-directory "~/org/")
+ '(org-directory "~/Dropbox/org/")
  '(org-agenda-files (list (concat org-directory "agenda_files/"))))
 
 (setq org-default-notes-file (concat org-directory "notes.org"))
