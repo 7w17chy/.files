@@ -29,7 +29,6 @@
     fzf
     mu
     discord
-    dropbox
     offlineimap
 
     # customized emacs
@@ -134,7 +133,7 @@
     emacs.enable = true;
     dropbox = {
       enable = true;
-      path = "${config.home.homeDirectory}/org";
+      path = "${config.home.homeDirectory}/Dropbox";
     };
   };
 
