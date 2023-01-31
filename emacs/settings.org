@@ -33,9 +33,13 @@
 * i use evil btw
 ** base evil
 #+begin_src emacs-lisp
-    (use-package evil
-      :ensure t
-      :config (evil-mode t))
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+    (setq evil-want-keybinding nil)
+    :config
+    (evil-mode t))
 #+end_src
 ** multiple cursors
 #+begin_src emacs-lisp
@@ -59,6 +63,7 @@
 ** try to use it everywhere -- hope i can contribute to that collection somewhen :^)
 #+begin_src emacs-lisp
   (use-package evil-collection
+    :after evil
     :ensure t
     :custom
     (evil-collection-init))
