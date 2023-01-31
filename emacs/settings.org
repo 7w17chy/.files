@@ -308,6 +308,8 @@
       (setq org-capture-templates
 	    '(("t" "Todo" entry (file "agenda_files/agenda.org")
 	       "* TODO %?\n %i\n")
+	      ("b" "BuFa Todo" entry (file "agenda_files/BuFa_2023.org")
+	       "* TODO %?\n %i\n")
 	      ("c" "Media recommendation" entry (file "agenda_files/recom.org")
 	       "* %?\n %i\n")
 	      ("z" "Quote" entry (file "agenda_files/quotes.org")
