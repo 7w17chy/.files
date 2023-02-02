@@ -41,10 +41,13 @@
     :config
     (evil-mode t))
 #+end_src
-** multiple cursors
+** try to use it everywhere -- hope i can contribute to that collection somewhen :^)
 #+begin_src emacs-lisp
-  (use-package evil-mc
-    :ensure t)
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :init
+    (evil-collection-init))
 #+end_src
 ** evil in org mode
 #+begin_src emacs-lisp
@@ -59,14 +62,6 @@
     :ensure t
     :config
     (add-hook 'LaTeX-mode-hook #'evil-tex-mode))
-#+end_src
-** try to use it everywhere -- hope i can contribute to that collection somewhen :^)
-#+begin_src emacs-lisp
-  (use-package evil-collection
-    :after evil
-    :ensure t
-    :custom
-    (evil-collection-init))
 #+end_src
 
 * project management via projectile

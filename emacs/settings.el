@@ -19,10 +19,17 @@
 
 (use-package evil
   :ensure t
-  :config (evil-mode t))
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode t))
 
-(use-package evil-mc
-  :ensure t)
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :init
+  (evil-collection-init))
 
 (use-package evil-org
   :after evil
@@ -33,11 +40,6 @@
   :ensure t
   :config
   (add-hook 'LaTeX-mode-hook #'evil-tex-mode))
-
-(use-package evil-collection
-  :ensure t
-  :custom
-  (evil-collection-init))
 
 (use-package projectile
   :ensure t
