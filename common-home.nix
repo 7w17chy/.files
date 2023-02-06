@@ -16,6 +16,7 @@
 
   # packages to install
   home.packages = with pkgs; [
+    kitty
     bat
     lazygit
     exa
