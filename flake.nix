@@ -5,6 +5,8 @@
     nixpkgs.url = "nixpkgs/nixos-22.11";
     home-manager.url = "github:nix-community/home-manager/release-22.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    hyprland.url = "github:hyprwm/Hyprland";
   };
 
   outputs = { self, nixpkgs, home-manager, ... }: 
@@ -43,8 +45,13 @@
       thulis = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
+          # custom config
           ./common-home.nix
           ./thinkpad/home.nix
+
+          # hyperland window manager
+          hyprland.homeManagerModules.default
+          {wayland.windowManager.hyprland.enable = true;}
         ];
       };
     };
