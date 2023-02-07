@@ -104,6 +104,7 @@
       curl
     #  thunderbird
     ];
+    defaultUserShell = pkgs.zsh;
   };
 
   # Allow unfree packages
