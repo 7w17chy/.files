@@ -56,6 +56,12 @@
     })
   ];
 
+  # neovim configuration
+  home."~/.config/nvim/" = {
+    source = ./nvim;
+    recursive = true;
+  }
+
   # git config
   programs.git = {
     enable = true;
