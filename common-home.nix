@@ -18,6 +18,7 @@
   home.packages = with pkgs; [
     kitty
     neovim
+    neovide
     bat
     lazygit
     exa
