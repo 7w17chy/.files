@@ -17,6 +17,7 @@
   # packages to install
   home.packages = with pkgs; [
     kitty
+    nodejs
     neovim
     neovide
     bat
@@ -57,10 +58,7 @@
   ];
 
   # neovim configuration
-  home."~/.config/nvim/" = {
-    source = ./nvim;
-    recursive = true;
-  }
+  xdg.configFile."nvim".source = ./nvim;  
 
   # git config
   programs.git = {
