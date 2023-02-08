@@ -17,6 +17,7 @@
   # packages to install
   home.packages = with pkgs; [
     kitty
+    neovim
     bat
     lazygit
     exa

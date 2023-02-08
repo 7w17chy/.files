@@ -1,0 +1,579 @@
+* package management
+** enable melpa
+#+begin_src emacs-lisp
+  (require 'package)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+#+end_src
+** use 'use-package'
+** Initialization
+#+begin_src emacs-lisp
+  ;; This is only needed once, near the top of the file
+  (eval-when-compile
+    (require 'use-package))
+#+end_src
+*** Always compile packages and use newest available version
+#+begin_src emacs-lisp
+  (use-package auto-compile
+    :ensure t
+    :config (auto-compile-on-load-mode))
+  (setq load-prefer-newer t)
+#+end_src
+** add `.emacs.d/modes/` to the runtime path, to put non-bundled modes into it
+#+begin_src emacs-lisp
+  (add-to-list 'load-path (concat user-emacs-directory "modes"))
+#+end_src
+** needed for some packages
+#+begin_src emacs-lisp
+  (use-package bind-key
+    :ensure t
+    :config
+    (add-to-list 'same-window-buffer-names "*Personal Keybindings*"))
+#+end_src
+
+* i use evil btw
+** base evil
+#+begin_src emacs-lisp
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+    (setq evil-want-keybinding nil)
+    :config
+    (evil-mode t))
+#+end_src
+** try to use it everywhere -- hope i can contribute to that collection somewhen :^)
+#+begin_src emacs-lisp
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :init
+    (evil-collection-init))
+#+end_src
+** evil in org mode
+#+begin_src emacs-lisp
+  (use-package evil-org
+    :after evil
+    :ensure t)
+#+end_src
+** latex goodies
+#+begin_src emacs-lisp
+  (use-package evil-tex
+    :after evil
+    :ensure t
+    :config
+    (add-hook 'LaTeX-mode-hook #'evil-tex-mode))
+#+end_src
+
+* project management via projectile
+#+begin_src emacs-lisp
+  (use-package projectile
+    :ensure t
+    :init
+    (projectile-mode t)
+    :config
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+#+end_src
+
+* managing eMail 
+** compose and read mail using =mu4e=
+#+begin_src emacs-lisp
+  (defun remove-nth-element (nth list)
+    (if (zerop nth) (cdr list)
+      (let ((last (nthcdr (1- nth) list)))
+	(setcdr last (cddr last))
+	list)))
+
+  (use-package mu4e
+    :ensure nil
+    :custom
+    (smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg"))
+    (mu4e-user-mail-address-list '("nermax03@gmail.com"))
+    (mu4e-mu-binary (executable-find "mu"))
+    (mu4e-maildir "~/Mail")
+    (mu4e-contexts
+     `(
+       ,(make-mu4e-context
+	 :name "Gmail"
+	 :match-func (lambda (msg)
+		       (when msg
+			 (mu4e-message-contact-field-matches
+			  msg '(:from :to :cc :bcc) "nermax03@gmail.com")))
+
+	 :vars '(
+		 (mu4e-trash-folder . "/Gmail/[Gmail].Trash")
+		 (mu4e-refile-folder . "/Gmail/[Gmail].Archive")
+		 (mu4e-drafts-folder . "/Gmail/[Gmail].Drafts")
+		 (mu4e-sent-folder . "/Gmail/[Gmail].Sent Mail")
+		 (user-mail-address  . "nermax03@gmail.com")
+		 (user-full-name . "Max Nerius")
+		 (smtpmail-smtp-user . "nermax03")
+		 (smtpmail-local-domain . "gmail.com")
+		 (smtpmail-default-smtp-server . "smtp.gmail.com")
+		 (smtpmail-smtp-server . "smtp.gmail.com")
+		 (smtpmail-smtp-service . 587)))))
+    (send-mail-function (quote smtpmail-send-it))
+    (mu4e-marks (remove-nth-element 5 mu4e-marks))
+    (mu4e-view-show-addresses t)
+    (message-kill-buffer-on-exit t)
+    (mu4e-context-policy 'pick-first)
+    (mu4e-confirm-quit nil)
+    :bind (("C-c m" . 'mu4e))
+    :config
+    ;; Taken from: http://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and-/
+    (add-to-list 'mu4e-marks
+		 '(trash
+		   :char ("d" . "▼")
+		   :prompt "dtrash"
+		   :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
+		   :action (lambda (docid msg target)
+			     (mu4e~proc-move docid
+					     (mu4e~mark-check-target target) "-N")))))
+#+end_src
+** get notifications about new mail using =mu4e-alert=
+#+begin_src emacs-lisp
+  (use-package mu4e-alert
+    :ensure t
+    :config
+    (setq mu4e-alert-interesting-mail-query
+	  (concat
+	   "flag:unread AND maildir:/GmailAccount/INBOX "
+	   "OR "
+	   "flag:unread AND maildir:/OutlookAccount/INBOX "
+	   ))
+    (mu4e-alert-set-default-style 'libnotify)
+    (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
+    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)
+    (mu4e-alert-enable-mode-line-display))
+#+end_src
+
+* use direnv for flexible dev environments
+#+begin_src emacs-lisp
+  (use-package direnv
+    :ensure t
+    :config
+    (direnv-mode))
+#+end_src
+
+* UI enhancements
+** enhance scrolling performance for documents with images
+#+begin_src emacs-lisp
+  (setq frame-inhibit-implied-resize nil)
+#+end_src
+** all the beautiful icons
+#+begin_src emacs-lisp
+  (use-package all-the-icons
+    :ensure t)
+#+end_src
+** color theme
+#+begin_src emacs-lisp
+  (use-package gruvbox-theme
+    :ensure t
+    :config
+    (load-theme 'gruvbox-light-medium t))
+#+end_src
+** set a nice font
+#+begin_src emacs-lisp
+  (set-frame-font "Iosevka Comfy Motion 11")
+#+end_src
+** Always make interactive buffers appear horizontally 
+Credit: https://stackoverflow.com/questions/21542914/make-buffer-list-always-appear-in-horizontal-split ("phils")
+#+begin_src emacs-lisp
+  (setq split-width-threshold nil)
+  (setq split-height-threshold 0)
+#+end_src
+** Disable the menubar
+order matters: by putting 'tool-bar-mode 0' before 'menu-bar-mode 0', a black box
+appears instead of the scroll bar.
+#+BEGIN_SRC emacs-lisp
+  (menu-bar-mode 0)
+#+END_SRC
+** Disable the toolbar
+#+BEGIN_SRC emacs-lisp
+  (tool-bar-mode 0)
+#+END_SRC
+** Disable the scrollbar
+#+BEGIN_SRC emacs-lisp
+  (toggle-scroll-bar 0)
+#+END_SRC
+** get all the pretty icons
+#+begin_src emacs-lisp
+  (use-package all-the-icons
+    :ensure t)
+#+end_src 
+** Steal doom emacs's modeline
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :ensure t
+    :init
+    (doom-modeline-mode 1)
+    :config
+    (setq doom-modeline-height 23)) 
+#+end_src
+** highlight the current line
+#+begin_src emacs-lisp
+  (global-hl-line-mode t)
+#+end_src
+** vary the cursor shape
+#+begin_src emacs-lisp
+  (set-default 'cursor-type 'bar)
+#+end_src
+** set a nice dashboard on startup
+#+begin_src emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :init
+    (dashboard-setup-startup-hook)
+    :config
+    (setq dashboard-projects-backend 'projectile)
+    (setq dashboard-items '((recents  . 5)
+			    (bookmarks . 5)
+			    (projects . 5)))
+    (setq dashboard-startup-banner 'logo)
+    (setq dashboard-startup-banner "~/Pictures/meditate.png"))
+#+end_src
+
+* Switch to a more ergonomic buffer switching interface
+#+begin_src emacs-lisp
+  (global-set-key [remap list-buffers] 'ibuffer)
+#+end_src
+
+* Window management
+** undo/redo for window management and configuration
+#+begin_src emacs-lisp
+  (winner-mode 1)
+#+end_src
+** more ergonomic window switching
+#+begin_src emacs-lisp
+  (global-set-key (kbd "M-o") 'other-window)
+#+end_src
+** even more window switching magic: use S-<arrow key> to switch
+#+begin_src emacs-lisp
+  (windmove-default-keybindings)
+#+end_src
+
+* Text editing
+** sentences can also end without two spaces after the period.
+#+begin_src emacs-lisp
+					  ;(sentence-end-double-space nil)
+#+end_src
+
+* Code editing
+** The following two settings contradict each other, choose one!
+#+begin_src emacs-lisp
+  ;; Treat text written in CamelCase as distinct words (camel, case)
+  (subword-mode 1)
+  ;; Treat text written in snake_case as one word (snakecase)
+  (superword-mode 1)
+#+end_src
+** Find "points of interest" in the current buffer
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-M-i") 'imenu)
+#+end_src
+** Give `recompile` a keybinding
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c r") 'recompile)
+#+end_src
+* Org stuff
+** enable org-tempo
+#+begin_src emacs-lisp
+  (require 'org-tempo)
+#+end_src
+** evaluate source code blocks
+#+begin_src emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages '((python . t)
+			       (haskell . t)))
+#+end_src
+** syntax-highlight code in source blocks when exporting
+#+begin_src emacs-lisp
+  (setq org-src-fontify-natively t)
+#+end_src
+** When closing a task, note date and time of closing
+#+BEGIN_SRC emacs-lisp
+  (setq org-log-done 'time)
+#+END_SRC
+** Put all org files in one directory
+#+begin_src emacs-lisp
+  (custom-set-variables
+   '(org-directory "~/Dropbox/org/")
+   '(org-agenda-files (list (concat org-directory "agenda_files/"))))
+#+end_src
+** Org-capture
+*** set default notes file for org-capture
+#+begin_src emacs-lisp
+  (setq org-default-notes-file (concat org-directory "notes.org"))
+#+end_src
+*** capture templates
+#+begin_src emacs-lisp
+  (setq org-capture-templates
+	'(("t" "Todo" entry (file "agenda_files/agenda.org")
+	   "* TODO %?\n %i\n")
+	  ("b" "BuFa Todo" entry (file "agenda_files/BuFa_2023.org")
+	   "* TODO %?\n %i\n")
+	  ("c" "Media recommendation" entry (file "agenda_files/recom.org")
+	   "* %?\n %i\n")
+	  ("z" "Quote" entry (file "agenda_files/quotes.org")
+	   "* %?\n %i\n")
+	  ("i" "Idee" entry (file "agenda_files/ideen.org")
+	   "* %?\n %i\n")))
+#+end_src
+*** keybinding
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c c") 'org-capture) 
+#+end_src
+** Auto-save org buffers to disk
+#+begin_src emacs-lisp
+  (add-hook 'auto-save-hook 'org-save-all-org-buffers)
+#+end_src
+** Activate org mode for *.org files
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+#+END_SRC
+** Press *C-c l* to add a file to the agenda
+#+BEGIN_SRC emacs-lisp
+  (global-set-key "\C-cl" 'org-store-link)
+#+END_SRC
+** Press *C-c a* to show the org-agenda menu
+#+BEGIN_SRC emacs-lisp
+  (global-set-key "\C-ca" 'org-agenda)
+#+END_SRC
+** Declare todo states
+#+BEGIN_SRC emacs-lisp
+  (setq org-todo-keywords
+	'((sequence "TODO(t)" "START(s)" "WAIT(w)" "|" "DONE(d)" "CANCELLED(c)" "DELEGATED(a)")))
+#+END_SRC
+** Replace the ... as mark for folded blocks/notes
+#+BEGIN_SRC emacs-lisp
+  (setq org-ellipsis "⤵")
+#+END_SRC
+** Use syntax highlighting when editing source code blocks
+#+BEGIN_SRC emacs-lisp
+  (setq org-src-fontify-natively t)
+#+END_SRC
+** Make tabs behave in SRC blocks just like in the language's major mode
+#+BEGIN_SRC emacs-lisp
+   (setq org-src-tab-acts-natively t)
+   #+END_SRC
+** Include calendar events, luna phases etc. into the org-agenda
+   #+BEGIN_SRC emacs-lisp
+   (setq org-agenda-include-diary t)
+   #+END_SRC
+** Pretty org bullets
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-bullets
+       :ensure t
+       :config
+       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+   #+END_SRC
+** org-roam
+*** setup
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :ensure t
+    :after org
+    :init (setq org-roam-v2-ack t) ;; Acknowledge V2 upgrade
+    :custom
+    (org-roam-directory (concat org-directory "second_brain"))
+    (org-roam-completion-everywhere t)
+    :bind (("C-c n f" . org-roam-node-find)
+	   ("C-c n r" . org-roam-node-random)
+	   ("M-i" . completion-at-point)
+	   (:map org-mode-map
+		 (("C-c n i" . org-roam-node-insert)
+		  ("C-c n o" . org-id-get-create)
+		  ("C-c n t" . org-roam-tag-add)
+		  ("C-c n a" . org-roam-alias-add)
+		  ("C-c n l" . org-roam-buffer-toggle)))
+	   (:map org-roam-dailies-map
+		 (("Y" . org-roam-dailies-capture-yesterday)
+		  ("T" . org-roam-dailies-capture-tomorrow))))
+    :bind-keymap
+    ("C-c n d" . org-roam-dailies-map)
+    :config
+    (org-roam-setup)
+    (org-roam-db-autosync-mode)
+    (require 'org-roam-dailies)) 
+#+end_src
+*** cite/ref external content via org-protocol
+#+begin_src emacs-lisp
+  ;; (use-package org-roam-protocol
+  ;;   :after org-roam
+  ;;   :ensure t)
+#+end_src
+*** better org-export support
+#+begin_src emacs-lisp
+  ;; (use-package org-roam-export
+  ;;   :after org-roam
+  ;;   :ensure t)
+#+end_src
+*** customize capture templates
+#+begin_src emacs-lisp
+#+end_src
+*** Insert a space into the buffer name minibuffer instead of trying to complete an elisp symbol name
+[[https://org-roam.discourse.group/t/org-roam-node-find-space-not-allowed-in-node-title/1847/6][credit]]
+#+begin_src emacs-lisp
+  (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
+#+end_src
+*** highlight org-roam links in a different color
+#+begin_src emacs-lisp
+  ;; (custom-set-faces
+  ;;   '((org-roam-link org-roam-link-current)
+  ;;     :foreground "#e24888" :underline t))
+#+end_src
+*** org-journal
+#+begin_src emacs-lisp
+  (use-package org-journal
+    :ensure t
+    :after org
+    :custom
+    (org-roam-dailies-directory "journal/"))
+#+end_src
+
+*** put org-roam-journal files into a seperate directory
+#+begin_src emacs-lisp
+  (setq org-roam-dailies-capture-templates
+	'(("d" "daily" plain (function org-roam-capture--get-point) ""
+	   :immediate-finish t 
+	   :file-name "dailies/%<%Y-%m-%d>" 
+	   :head "#+TITLE: %<%Y-%m-%d>")))
+#+end_src
+
+** replace certain latex expressions with their corresponding unicode equivalent
+#+begin_src emacs-lisp
+  (setq org-pretty-entities t)
+#+end_src
+** CDLaTeX in org mode (enable for all org buffers)
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook #'turn-on-org-cdlatex)
+#+end_src
+** use imagemagick for =org-latex-preview=
+#+begin_src emacs-lisp
+  (setq org-preview-latex-default-process 'imagemagick)
+#+end_src
+** when previewing latex, add the necessary =\usepackage{xyz}= to the document preamble
+The default is to only add it to exported documents. Therefore =org-latex-preview= will
+error out saying the packages havn't loaded.
+#+begin_src emacs-lisp
+  (with-eval-after-load 'org
+    (add-to-list 'org-latex-packages-alist '("" "tcolorbox" t)))
+#+end_src
+** customize the latex preview
+#+begin_src emacs-lisp
+  (plist-put org-format-latex-options :scale 1.2)
+#+end_src
+** shrink preview image size
+#+begin_src emacs-lisp
+(setq org-image-actual-width 350)
+#+end_src
+** add custom environments to cdlatex
+#+begin_src emacs-lisp
+      (setq cdlatex-env-alist
+	    '(("definition" "\\begin{tcolorbox}[title=Definition]\nAUTOLABEL\n?\n\\end{tcolorbox}\n" nil)
+	      ("hinweis" "\\begin{tcolorbox}[title=Hinweis,colback=yellow!5!white,colframe=yellow!75!black]\nAUTOLABEL\n?\n\\end{tcolorbox}\n" nil)
+	      ("warnung" "\\begin{tcolorbox}[title=Uffbasse!,colback=red!5!white,colframe=red!75!black]\nAUTOLABEL\n?\n\\end{tcolorbox}\n")))
+
+      (setq cdlatex-command-alist
+	    '(("defi" "Insert Definition env"   "" cdlatex-environment ("definition") t nil)
+	      ("hinw" "Insert Hinweis env" "" cdlatex-environment ("hinweis") t nil)
+	      ("warn" "Insert Warnung env" "" cdlatex-environment ("warnung") t nil)))
+#+end_src
+** hide markup markers e. g. =/../=
+#+begin_src emacs-lisp
+  (setq org-hide-emphasis-markers t)
+#+end_src
+** display inline images and inline latex preview by default on buffer startup
+#+begin_src emacs-lisp
+  (setq org-startup-with-inline-images t)
+  (setq org-startup-with-latex-preview t)
+#+end_src
+* use vertico for completions
+#+begin_src emacs-lisp
+  (use-package vertico
+    :ensure t
+    :init
+    (vertico-mode))
+#+end_src
+** put recently visited files at the top of the search results
+#+begin_src emacs-lisp
+;  (use-package savehist
+;    :init
+;    :ensure t
+;    (savehist-mode))
+#+end_src
+
+** interfaces extensions (add file/buffer metadata to the completion buffer)
+#+begin_src emacs-lisp
+  (use-package marginalia
+    :after vertico
+    :ensure t
+    :init
+    (marginalia-mode))
+#+end_src
+
+* Put all save files in a dedicated directory
+#+begin_src emacs-lisp
+(setq backup-directory-alist
+        `(("." . ,(concat user-emacs-directory "backups"))))
+#+end_src
+
+* Programming
+** paredit
+#+begin_src emacs-lisp
+(use-package paredit
+  :ensure t
+  :mode ("\\.lisp?\\'" . paredit-mode))
+#+end_src
+** company-mode settings
+#+begin_src emacs-lisp
+    (use-package company
+      :ensure t
+      :config
+      (company-tng-configure-default)
+  (company-global-modes))
+#+end_src
+** common lsp-mode/lsp-ui-mode settings
+[[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][how to turn off annoying lsp-mode features]]
+#+begin_src emacs-lisp
+  (use-package lsp-ui
+    :ensure t
+    :commands lsp-ui-mode
+    :custom
+    ;; disable flashy, distracting noise
+    (lsp-ui-sideline-enable nil)
+    (lsp-ui-sideline-show-code-actions nil)
+    (lsp-ui-sideline-enable nil)
+    (lsp-ui-sideline-enable nil)
+    (lsp-ui-doc-enable nil))
+#+end_src
+
+* LaTeX editing
+** use AucTeX
+#+begin_src emacs-lisp
+;  (use-package auctex
+;    :ensure t)
+#+end_src
+** Replace certain LaTeX expressions with their corresponding unicode characters
+#+begin_src emacs-lisp
+  (add-hook 'LaTeX-mode-hook 'prettify-symbols-mode)
+#+end_src
+
+* elfeed for RSS feeds
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :ensure t
+    :custom
+    (elfeed-search-filter "@2-days-ago +unread")
+    (elfeed-search-title-max-width 100)
+    (elfeed-search-title-min-width 100)
+    (elfeed-feeds
+     '(
+       ;; programming
+       ("https://news.ycombinator.com/rss" hacker)
+       ("https://www.heise.de/developer/rss/news-atom.xml" heise)
+       ("https://www.reddit.com/r/programming.rss" programming)
+       ("https://www.reddit.com/r/emacs.rss" emacs)
+       ("https://www.spektrum.de/alias/rss/spektrum-de-rss-feed/996406" spektrum)
+       ("https://media.ccc.de/news.atom" ccc)
+       )))
+#+end_src
+
