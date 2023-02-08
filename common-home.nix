@@ -59,6 +59,24 @@
 
   # neovim configuration
   xdg.configFile."nvim".source = ./nvim;  
+  programs.neovim = {
+    viAlias = true;
+    vimAlias = true;
+
+    plugins = with pkgs.vimPlugins; [
+      vim-nix
+      vim-surround
+      rust.vim
+      vim-rooter
+      fzf.vim
+      direnv.vim
+
+      # coc.nvim
+      coc-nvim
+      coc-pairs
+      coc-rust-analyzer
+    ];
+  };
 
   # git config
   programs.git = {
