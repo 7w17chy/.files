@@ -60,7 +60,6 @@
   ];
 
   # neovim configuration
-  xdg.configFile."nvim".source = ./nvim;  
   programs.neovim = {
     viAlias = true;
     vimAlias = true;
