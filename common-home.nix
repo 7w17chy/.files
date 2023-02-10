@@ -36,6 +36,7 @@
     mu
     discord
     offlineimap
+    gcc
 
     # customized emacs
     (emacsWithPackagesFromUsePackage {
