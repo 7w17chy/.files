@@ -18,6 +18,7 @@
   home.packages = with pkgs; [
     kitty
     nodejs
+    yarn
     neovim
     neovide
     bat
@@ -25,6 +26,7 @@
     exa
     syncthing
     zsh
+    wget
     starship
     hexchat
     chromium
@@ -62,20 +64,6 @@
   programs.neovim = {
     viAlias = true;
     vimAlias = true;
-
-    plugins = with pkgs.vimPlugins; [
-      vim-nix
-      vim-surround
-      rust.vim
-      vim-rooter
-      fzf.vim
-      direnv.vim
-
-      # coc.nvim
-      coc-nvim
-      coc-pairs
-      coc-rust-analyzer
-    ];
   };
 
   # git config
