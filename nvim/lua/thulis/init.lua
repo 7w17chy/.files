@@ -1,1 +1,3 @@
-print("Henlo from thulis!")
+require("thulis.remap")
+require("thulis.packer")
+require("thulis.set")
