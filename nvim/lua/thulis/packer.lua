@@ -9,6 +9,9 @@ return require('packer').startup(function(use)
   use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
   use 'mbbill/undotree'
 
+  -- Programming languages
+  use 'JuliaEditorSupport/julia-vim'
+
   -- move around
   use {
     'nvim-telescope/telescope.nvim', 
