@@ -8,6 +8,7 @@ return require('packer').startup(function(use)
   use 'kylechui/nvim-surround'
   use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
   use 'mbbill/undotree'
+  use 'jiangmiao/auto-pairs'
 
   -- move around
   use {
