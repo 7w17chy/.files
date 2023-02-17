@@ -16,27 +16,29 @@
 
   # packages to install
   home.packages = with pkgs; [
+    # environment
     kitty
-    nodejs
-    yarn
-    neovim
-    neovide
+    awesome
     bat
-    lazygit
     exa
-    syncthing
     zsh
     wget
     starship
+    direnv
+    gnome.gnome-tweaks
+
+    # development
+    neovim
+    neovide
+    lazygit
+    lazydocker
+    gcc
+
+    # communication and web
+    syncthing
     hexchat
     chromium
-    gnome.gnome-tweaks
-    direnv
-    fzf
-    mu
     discord
-    offlineimap
-    gcc
 
     # customized emacs
     (emacsWithPackagesFromUsePackage {
@@ -54,8 +56,6 @@
         cdlatex
         epkgs.direnv # beware of the pkgs.direnv <-> epkgs.direnv confusion!
         pdf-tools
-        mu
-        mu4e-alert
       ];
     })
   ];
